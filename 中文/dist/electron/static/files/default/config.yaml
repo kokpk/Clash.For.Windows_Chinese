@@ -1,0 +1,63 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+allow-lan: false
+mode: Rule
+log-level: info
+external-controller: '127.0.0.1:9090'
+secret: ''
+
+# System proxy will ignore these domains(or ipnet)
+cfw-bypass:
+  - localhost
+  - 127.*
+  - 10.*
+  - 172.16.*
+  - 172.17.*
+  - 172.18.*
+  - 172.19.*
+  - 172.20.*
+  - 172.21.*
+  - 172.22.*
+  - 172.23.*
+  - 172.24.*
+  - 172.25.*
+  - 172.26.*
+  - 172.27.*
+  - 172.28.*
+  - 172.29.*
+  - 172.30.*
+  - 172.31.*
+  - 192.168.*
+  - <local>
+
+# Proxies module latency test settings
+cfw-latency-timeout: 3000 # seconds
+cfw-latency-url: http://www.gstatic.com/generate_204
+
+# Identify strategy of breaking connections after switching to a new proxy/profile/mode
+# Options for proxy: none, chain(proxy group in connection chains), all
+# Options for profile: true, false
+# Options for mode: true, false
+cfw-conn-break-strategy:
+  proxy: none
+  profile: true
+  mode: false
+
+# Run child process after CFW started
+# Refer: https://docs.cfw.lbyczf.com/contents/childprocess.html
+cfw-child-process: []
+
+# Will be ignored after profile selection
+Proxy:
+  - name: Shadowsocks
+    type: socks5
+    server: 127.0.0.1
+    port: 1080
+Proxy Group:
+  - name: Proxy
+    type: select
+    proxies:
+      - Shadowsocks
+Rule:
+  - 'MATCH,DIRECT'
